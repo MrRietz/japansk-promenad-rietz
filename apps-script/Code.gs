@@ -111,9 +111,13 @@ function doPost(e) {
     let row = findRowForDate_(sheet, date);
 
     if (!row) {
-      // Lägg till ny rad sist och skriv datumet.
+      // Lägg till ny rad sist och skriv datumet som ren text (YYYY-MM-DD).
+      // setNumberFormat('@') hindrar Sheets från att tolka om strängen till ett
+      // Date-objekt, så att datumnyckeln alltid matchar mellan läsning och skrivning.
       row = Math.max(sheet.getLastRow() + 1, DATA_START_ROW);
-      sheet.getRange(row, COL_DATE).setValue(date);
+      const cell = sheet.getRange(row, COL_DATE);
+      cell.setNumberFormat('@');
+      cell.setValue(date);
     }
 
     sheet.getRange(row, PEOPLE[person]).setValue(done ? '✓' : '');
