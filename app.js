@@ -26,7 +26,11 @@ const state = {
   selectedDate: null,
 };
 
-const demoMode = !window.API_URL || window.API_URL.trim() === '';
+// API_URL deklareras i config.js (som `const`, så den blir inte en window-egenskap –
+// därför refererar vi den direkt). typeof-vakten gör att koden inte kraschar om
+// config.js skulle saknas.
+const apiUrl = (typeof API_URL !== 'undefined' && API_URL) ? API_URL.trim() : '';
+const demoMode = apiUrl === '';
 
 /* ---------- DOM ---------- */
 const $ = (id) => document.getElementById(id);
@@ -79,7 +83,7 @@ async function fetchData() {
     return;
   }
   setStatus('Laddar…');
-  const res = await fetch(window.API_URL, { method: 'GET' });
+  const res = await fetch(apiUrl, { method: 'GET' });
   const data = await res.json();
   if (!data.ok) throw new Error(data.error || 'Fel vid hämtning');
   state.task = data.task || FALLBACK_TASK;
@@ -100,7 +104,7 @@ async function saveEntry(date, person, done) {
 
   // Apps Script web-apps tål inte custom headers (CORS preflight).
   // text/plain undviker preflight men levererar ändå JSON-strängen.
-  const res = await fetch(window.API_URL, {
+  const res = await fetch(apiUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({ date, person, done }),
