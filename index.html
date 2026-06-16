@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Japansk Promenad 🚶</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="hero-icon">🚶‍♀️🌸</div>
+      <h1>Japansk Promenad</h1>
+      <p class="hero-sub">Bocka av era promenader och håll koll på veckans mål.</p>
+    </header>
+
+    <section class="task-card" id="taskCard">
+      <div class="task-badge">Uppgiften</div>
+      <p class="task-text" id="taskText">Laddar uppgift…</p>
+    </section>
+
+    <section class="stats" id="stats" aria-live="polite"></section>
+
+    <section class="calendar-card">
+      <div class="calendar-head">
+        <button class="nav-btn" id="prevMonth" aria-label="Föregående månad">‹</button>
+        <h2 id="monthLabel">—</h2>
+        <button class="nav-btn" id="nextMonth" aria-label="Nästa månad">›</button>
+      </div>
+
+      <div class="legend" id="legend"></div>
+
+      <div class="weekdays">
+        <span>Mån</span><span>Tis</span><span>Ons</span><span>Tor</span>
+        <span>Fre</span><span>Lör</span><span>Sön</span>
+      </div>
+      <div class="grid" id="calendarGrid"></div>
+    </section>
+
+    <footer class="foot">
+      <span id="status" class="status">Ansluter…</span>
+      <button class="refresh-btn" id="refreshBtn" title="Uppdatera">↻ Uppdatera</button>
+    </footer>
+  </div>
+
+  <!-- Dagspanel som öppnas när man klickar på en dag -->
+  <div class="modal-overlay" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose" aria-label="Stäng">×</button>
+      <h3 id="modalDate">—</h3>
+      <p class="modal-hint">Markera vem som promenerade denna dag:</p>
+      <div class="person-toggles" id="personToggles"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
