@@ -93,10 +93,7 @@ async function fetchData() {
 }
 
 async function saveEntry(date, person, done) {
-  // Optimistisk uppdatering lokalt
-  if (!state.entries[date]) state.entries[date] = {};
-  state.entries[date][person] = done;
-
+  // Anroparen (togglePerson) har redan uppdaterat state optimistiskt.
   if (demoMode) {
     saveDemo();
     return;
@@ -111,7 +108,9 @@ async function saveEntry(date, person, done) {
   });
   const data = await res.json();
   if (!data.ok) throw new Error(data.error || 'Kunde inte spara');
-  if (data.entries) state.entries = data.entries; // synka mot sanningen i arket
+  // Medvetet INGEN omskrivning av state.entries här – den optimistiska
+  // uppdateringen ovan räcker, och att ersätta hela objektet skulle tvinga
+  // en extra omritning som syns som lagg.
 }
 
 /* ===========================================================
@@ -232,25 +231,31 @@ function closeModal() {
   state.selectedDate = null;
 }
 
-async function togglePerson(toggleEl) {
+function togglePerson(toggleEl) {
   const person = toggleEl.dataset.person;
   const iso = state.selectedDate;
   const willBeOn = !toggleEl.classList.contains('on');
 
-  toggleEl.classList.add('saving');
-  try {
-    await saveEntry(iso, person, willBeOn);
-    toggleEl.classList.toggle('on', willBeOn);
-    setStatus(demoMode ? 'Sparat lokalt' : 'Sparat i Google Sheet', 'ok');
-    renderStats();
-    renderCalendar();
-  } catch (err) {
-    setStatus('Fel: ' + err.message, 'err');
-    // rulla tillbaka optimistisk uppdatering
-    if (state.entries[iso]) state.entries[iso][person] = !willBeOn;
-  } finally {
-    toggleEl.classList.remove('saving');
-  }
+  // 1) Uppdatera allt direkt – ingen väntan på nätet.
+  if (!state.entries[iso]) state.entries[iso] = {};
+  state.entries[iso][person] = willBeOn;
+  toggleEl.classList.toggle('on', willBeOn);
+  renderStats();
+  renderCalendar();
+
+  // 2) Stäng popupen med en gång.
+  closeModal();
+
+  // 3) Spara i bakgrunden. Rulla tillbaka bara om det faktiskt misslyckas.
+  setStatus(demoMode ? 'Sparar lokalt…' : 'Sparar…');
+  saveEntry(iso, person, willBeOn)
+    .then(() => setStatus(demoMode ? 'Sparat lokalt' : 'Sparat i Google Sheet', 'ok'))
+    .catch((err) => {
+      setStatus('Kunde inte spara – försök igen', 'err');
+      if (state.entries[iso]) state.entries[iso][person] = !willBeOn;
+      renderStats();
+      renderCalendar();
+    });
 }
 
 /* ===========================================================
