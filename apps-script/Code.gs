@@ -4,9 +4,9 @@
  * Detta skript kopplas till Google Sheet:t och publiceras som en web-app.
  * Hemsidan (GitHub Pages) läser OCH skriver promenader via detta API.
  *
- * Arkets struktur (rad 1 = rubriker):
- *   A: Datum   |  B: Robin  |  C: Elisabeth
- *   Rad 2 innehåller uppgiftsbeskrivningen (lämnas orörd).
+ * Arkets struktur:
+ *   Rad 1, kolumn A: uppgiftsbeskrivningen.
+ *   Rad 2 = rubriker:  A: Datum  |  B: Robin  |  C: Elisabeth
  *   Promenadposter skrivs från rad 3 och nedåt.
  *
  * Se README.md för hur du installerar och publicerar detta.
@@ -15,8 +15,8 @@
 // Namnet på fliken som datan ligger i. Byt om din flik heter något annat.
 const SHEET_NAME = 'Blad1';
 
-// Rad där uppgiftsbeskrivningen ligger (kolumn A). Promenaddata börjar raden efter.
-const TASK_ROW = 2;
+// Rad där uppgiftsbeskrivningen ligger (kolumn A) respektive där promenaddata börjar.
+const TASK_ROW = 1;
 const DATA_START_ROW = 3;
 
 // Personernas kolumner (1-indexerat). A=1, B=2, C=3.
