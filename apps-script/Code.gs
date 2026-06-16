@@ -141,3 +141,13 @@ function jsonResponse_(obj) {
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+/**
+ * TESTFUNKTION – kör denna direkt i Apps Script-editorn (välj "test" i listan
+ * och klicka ▶ Kör). Skriver ut vad GET skulle returnera i loggen (Visa → Logg).
+ * Bekräftar att DEN HÄR koden faktiskt körs, oberoende av distribution.
+ */
+function test() {
+  const out = doGet().getContent();
+  Logger.log(out);
+}
