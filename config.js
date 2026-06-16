@@ -9,4 +9,4 @@
 //  Lämnar du den tom körs sidan i DEMO-läge (data sparas bara lokalt).
 // =============================================================
 
-const API_URL = "https://script.google.com/macros/s/AKfycbw2mUmJdRz_Qc5rsmGFeimfAfjqf_IXznbJgJD4dMWQObjQj_GOH7XOFocBDu3gDG5-/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxWeSdQmal5FEs-Wc4dbCUsyVHZoyON9LmEDZ_vbJ4LRNwWudkqMGy2jDEI07ljD43F/exec";
